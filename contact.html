@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | AABROOH</title>
+<meta name="description" content="Get in touch with AABROOH — WhatsApp, Instagram or visit our store in Kanpur, Uttar Pradesh.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="announce">Pan India Shipping · Not Just a Dupatta, A Statement of Grace</div>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+    <div class="nav-icons">
+      <div class="search-box"><span>&#128269;</span><input type="text" id="navSearch" placeholder="Search dupattas..."></div>
+      <button class="icon-btn" title="Wishlist">&#9825;<span class="badge wishlist-count">0</span></button>
+      <button class="icon-btn" id="cartBtn" title="Cart">&#128092;<span class="badge cart-count">0</span></button>
+      <button class="nav-toggle" id="navToggle">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  </div>
+</header>
+
+<section class="page-header">
+  <span class="eyebrow">We'd Love to Hear From You</span>
+  <h1>Contact Us</h1>
+  <p>Questions about an order, sizing or a custom request — reach out anytime.</p>
+</section>
+
+<div class="contact-layout">
+  <form class="contact-form" id="contactForm">
+    <input type="text" placeholder="Your Name" required>
+    <input type="email" placeholder="Your Email" required>
+    <input type="tel" placeholder="Phone Number">
+    <textarea placeholder="Your Message" required></textarea>
+    <button type="submit" class="btn btn-primary">Send Message</button>
+  </form>
+
+  <div>
+    <div class="contact-info-card">
+      <h3>Get in Touch</h3>
+      <div class="contact-row"><span class="ic">&#128222;</span><span>+91 72370 28850</span></div>
+      <div class="contact-row"><span class="ic">&#128247;</span><span>@aabrooh.official</span></div>
+      <div class="contact-row"><span class="ic">&#128205;</span><span>Sahkar Nagar, Mulla Ji Cycle Road, Near SBI ATM, Kanpur, Uttar Pradesh 208019</span></div>
+      <div class="contact-social">
+        <a href="https://wa.me/917237028850" target="_blank" class="btn btn-whatsapp btn-sm">Chat on WhatsApp</a>
+        <a href="https://instagram.com/aabrooh.official" target="_blank" class="btn btn-outline btn-sm">Visit Instagram</a>
+      </div>
+      <div class="map-embed">Store Location — Kanpur, Uttar Pradesh</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+      <p>Not Just a Dupatta. A Statement of Grace. Premium dupattas for everyday wear, festive occasions and weddings — shipped pan India.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/aabrooh.official" target="_blank" title="Instagram">&#128247;</a>
+        <a href="https://wa.me/917237028850" target="_blank" title="WhatsApp">&#128241;</a>
+        <a href="#" target="_blank" title="Facebook">f</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="about.html">About</a></li><li><a href="shop.html">Shop</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Policies</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Shipping Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><address>Instagram: @aabrooh.official<br>Phone: +91 72370 28850<br><br>Sahkar Nagar, Mulla Ji Cycle Road,<br>Near SBI ATM, Kanpur,<br>Uttar Pradesh 208019</address></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 AABROOH. All rights reserved.</div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3>Your Bag</h3><button class="drawer-close" id="drawerClose">&times;</button></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</div>
+
+<a class="wa-float" href="https://wa.me/917237028850" target="_blank" title="Chat on WhatsApp">&#128241;</a>
+<div class="toast" id="toast"></div>
+
+<script src="js/products.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

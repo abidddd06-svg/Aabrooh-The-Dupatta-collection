@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Product | AABROOH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="announce">Pan India Shipping · Not Just a Dupatta, A Statement of Grace</div>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-icons">
+      <div class="search-box"><span>&#128269;</span><input type="text" id="navSearch" placeholder="Search dupattas..."></div>
+      <button class="icon-btn" title="Wishlist">&#9825;<span class="badge wishlist-count">0</span></button>
+      <button class="icon-btn" id="cartBtn" title="Cart">&#128092;<span class="badge cart-count">0</span></button>
+      <button class="nav-toggle" id="navToggle">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+  </div>
+</header>
+
+<div class="breadcrumb"><a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <span id="crumbName"></span></div>
+
+<div class="product-detail" id="productDetail"></div>
+
+<section class="section bg-ivory" id="relatedSection">
+  <h2 class="section-title related-title">You May Also Like</h2>
+  <div class="product-grid" id="relatedGrid"></div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+      <p>Not Just a Dupatta. A Statement of Grace. Premium dupattas for everyday wear, festive occasions and weddings — shipped pan India.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/aabrooh.official" target="_blank" title="Instagram">&#128247;</a>
+        <a href="https://wa.me/917237028850" target="_blank" title="WhatsApp">&#128241;</a>
+        <a href="#" target="_blank" title="Facebook">f</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="about.html">About</a></li><li><a href="shop.html">Shop</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Policies</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Shipping Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><address>Instagram: @aabrooh.official<br>Phone: +91 72370 28850<br><br>Sahkar Nagar, Mulla Ji Cycle Road,<br>Near SBI ATM, Kanpur,<br>Uttar Pradesh 208019</address></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 AABROOH. All rights reserved.</div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3>Your Bag</h3><button class="drawer-close" id="drawerClose">&times;</button></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</div>
+
+<a class="wa-float" href="https://wa.me/917237028850" target="_blank" title="Chat on WhatsApp">&#128241;</a>
+<div class="toast" id="toast"></div>
+
+<script src="js/products.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let currentQty = 1;
+
+  function loadProduct() {
+    const id = new URLSearchParams(window.location.search).get("id");
+    const p = PRODUCTS.find(pr => pr.id === id) || PRODUCTS[0];
+
+    document.getElementById("pageTitle").textContent = `${p.name} | AABROOH`;
+    document.getElementById("crumbName").textContent = p.name;
+
+    const wishActive = Store.getWishlist().includes(p.id) ? "active" : "";
+
+    document.getElementById("productDetail").innerHTML = `
+      <div class="gallery">
+        <div class="gallery-main" data-tag="${p.tag}"></div>
+        <div class="gallery-thumbs">
+          <div class="active"></div><div></div><div></div><div></div>
+        </div>
+      </div>
+      <div class="pd-info">
+        <div class="pd-cat">${p.category} &middot; ${p.fabric}</div>
+        <h1 class="pd-title">${p.name}</h1>
+        <div class="pd-rating">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>${p.rating} (${p.reviews} reviews)</span>
+        </div>
+        <div class="pd-price">
+          <span class="price-now">₹${p.price}</span>
+          <span class="price-mrp">₹${p.mrp}</span>
+          <span class="price-off">${Math.round((1 - p.price / p.mrp) * 100)}% OFF</span>
+        </div>
+        <p class="pd-desc">${p.description}</p>
+
+        <div class="pd-options">
+          <h4>Quantity</h4>
+          <div class="qty-selector">
+            <button onclick="changeQty(-1)">&minus;</button>
+            <span id="qtyVal">1</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="pd-actions">
+          <button class="btn btn-primary" onclick="addToCart('${p.id}', currentQty)">Add to Cart</button>
+          <a href="${whatsappLink(p)}" target="_blank" class="btn btn-whatsapp">Buy on WhatsApp</a>
+          <button class="btn btn-outline" onclick="toggleWishlist('${p.id}', this); this.classList.toggle('active-wish')" style="flex:0 0 52px;">&#9825;</button>
+        </div>
+
+        <div class="pd-accordion">
+          <div class="acc-item open">
+            <button class="acc-head" onclick="toggleAcc(this)">Fabric Details <span>&#8722;</span></button>
+            <div class="acc-body"><p>Fabric: ${p.fabric} &middot; Color: ${p.color} &middot; Occasion: ${p.occasion} &middot; Length: 2.25 metres approx.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" onclick="toggleAcc(this)">Care Instructions <span>+</span></button>
+            <div class="acc-body"><p>${p.care}</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" onclick="toggleAcc(this)">Shipping <span>+</span></button>
+            <div class="acc-body"><p>${p.shipping}</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" onclick="toggleAcc(this)">Return Policy <span>+</span></button>
+            <div class="acc-body"><p>${p.returns}</p></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // related products: same category, excluding current
+    const related = PRODUCTS.filter(pr => pr.category === p.category && pr.id !== p.id).slice(0, 4);
+    const fallback = related.length ? related : PRODUCTS.filter(pr => pr.id !== p.id).slice(0, 4);
+    document.getElementById("relatedGrid").innerHTML = fallback.map(rp => `
+      <div class="product-card">
+        <a href="product.html?id=${rp.id}">
+          <div class="product-media" data-tag="${rp.tag}">${rp.badge ? `<span class="product-badge">${rp.badge}</span>` : ""}</div>
+        </a>
+        <button class="wishlist-btn ${Store.getWishlist().includes(rp.id) ? 'active' : ''}" onclick="toggleWishlist('${rp.id}', this)">&#9825;</button>
+        <div class="quick-view"><a href="product.html?id=${rp.id}">Quick View</a></div>
+        <div class="product-info">
+          <div class="product-cat">${rp.category}</div>
+          <a href="product.html?id=${rp.id}"><h3 class="product-name">${rp.name}</h3></a>
+          <div class="product-price"><span class="price-now">₹${rp.price}</span><span class="price-mrp">₹${rp.mrp}</span></div>
+          <div class="product-actions">
+            <button class="btn btn-primary btn-sm" onclick="addToCart('${rp.id}')">Add to Cart</button>
+            <a href="${whatsappLink(rp)}" target="_blank" class="btn btn-whatsapp btn-sm">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function changeQty(delta) {
+    currentQty = Math.max(1, currentQty + delta);
+    document.getElementById("qtyVal").textContent = currentQty;
+  }
+
+  function toggleAcc(btn) {
+    const item = btn.closest(".acc-item");
+    const isOpen = item.classList.contains("open");
+    document.querySelectorAll(".acc-item").forEach(i => { i.classList.remove("open"); i.querySelector(".acc-head span").textContent = "+"; });
+    if (!isOpen) { item.classList.add("open"); btn.querySelector("span").textContent = "\u2212"; }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadProduct);
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop | AABROOH</title>
+<meta name="description" content="Browse the full AABROOH dupatta collection — everyday, festive, wedding and party wear.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="announce">Pan India Shipping · Not Just a Dupatta, A Statement of Grace</div>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-icons">
+      <div class="search-box">
+        <span>&#128269;</span>
+        <input type="text" id="navSearch" placeholder="Search dupattas...">
+      </div>
+      <button class="icon-btn" title="Wishlist">&#9825;<span class="badge wishlist-count">0</span></button>
+      <button class="icon-btn" id="cartBtn" title="Cart">&#128092;<span class="badge cart-count">0</span></button>
+      <button class="nav-toggle" id="navToggle">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</header>
+
+<div class="breadcrumb"><a href="index.html">Home</a> / Shop</div>
+
+<section class="page-header">
+  <span class="eyebrow">Full Collection</span>
+  <h1>Shop All Dupattas</h1>
+  <p>Everyday elegance to bridal grandeur — find your drape.</p>
+</section>
+
+<div class="shop-layout">
+  <aside class="filters" id="filters">
+    <div class="filter-group">
+      <h4>Category</h4>
+      <label class="filter-option"><input type="checkbox" value="Everyday Collection" class="f-category"> Everyday Collection</label>
+      <label class="filter-option"><input type="checkbox" value="Premium Collection" class="f-category"> Premium Collection</label>
+      <label class="filter-option"><input type="checkbox" value="Festive Collection" class="f-category"> Festive Collection</label>
+      <label class="filter-option"><input type="checkbox" value="Wedding Collection" class="f-category"> Wedding Collection</label>
+      <label class="filter-option"><input type="checkbox" value="Party Wear" class="f-category"> Party Wear</label>
+    </div>
+    <div class="filter-group">
+      <h4>Fabric</h4>
+      <label class="filter-option"><input type="checkbox" value="Organza" class="f-fabric"> Organza</label>
+      <label class="filter-option"><input type="checkbox" value="Silk" class="f-fabric"> Silk</label>
+      <label class="filter-option"><input type="checkbox" value="Chiffon" class="f-fabric"> Chiffon</label>
+      <label class="filter-option"><input type="checkbox" value="Georgette" class="f-fabric"> Georgette</label>
+      <label class="filter-option"><input type="checkbox" value="Net" class="f-fabric"> Net</label>
+      <label class="filter-option"><input type="checkbox" value="Banarasi Silk" class="f-fabric"> Banarasi Silk</label>
+      <label class="filter-option"><input type="checkbox" value="Cotton Silk" class="f-fabric"> Cotton Silk</label>
+    </div>
+    <div class="filter-group">
+      <h4>Occasion</h4>
+      <label class="filter-option"><input type="checkbox" value="Everyday" class="f-occasion"> Everyday</label>
+      <label class="filter-option"><input type="checkbox" value="Festive" class="f-occasion"> Festive</label>
+      <label class="filter-option"><input type="checkbox" value="Wedding" class="f-occasion"> Wedding</label>
+      <label class="filter-option"><input type="checkbox" value="Party" class="f-occasion"> Party</label>
+    </div>
+    <div class="filter-group">
+      <h4>Price up to ₹<span id="priceVal">6500</span></h4>
+      <div class="price-range">
+        <input type="range" id="priceRange" min="1000" max="6500" value="6500">
+      </div>
+    </div>
+    <button class="btn btn-outline btn-block btn-sm" onclick="clearFilters()">Clear Filters</button>
+  </aside>
+
+  <div class="shop-main">
+    <div class="shop-toolbar">
+      <button class="btn btn-outline btn-sm mobile-filter-toggle" onclick="document.getElementById('filters').classList.toggle('open')">Filters</button>
+      <span class="result-count" id="resultCount">Showing 8 products</span>
+      <select class="sort-select" id="sortSelect">
+        <option value="default">Sort: Featured</option>
+        <option value="new">Newest</option>
+        <option value="low">Price: Low to High</option>
+        <option value="high">Price: High to Low</option>
+        <option value="popular">Popularity</option>
+      </select>
+    </div>
+    <div class="product-grid" id="shopGrid"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+      <p>Not Just a Dupatta. A Statement of Grace. Premium dupattas for everyday wear, festive occasions and weddings — shipped pan India.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/aabrooh.official" target="_blank" title="Instagram">&#128247;</a>
+        <a href="https://wa.me/917237028850" target="_blank" title="WhatsApp">&#128241;</a>
+        <a href="#" target="_blank" title="Facebook">f</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul><li><a href="about.html">About</a></li><li><a href="shop.html">Shop</a></li><li><a href="contact.html">Contact</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Policies</h4>
+      <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Shipping Policy</a></li><li><a href="#">Terms of Service</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <address>Instagram: @aabrooh.official<br>Phone: +91 72370 28850<br><br>Sahkar Nagar, Mulla Ji Cycle Road,<br>Near SBI ATM, Kanpur,<br>Uttar Pradesh 208019</address>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 AABROOH. All rights reserved.</div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3>Your Bag</h3><button class="drawer-close" id="drawerClose">&times;</button></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</div>
+
+<a class="wa-float" href="https://wa.me/917237028850" target="_blank" title="Chat on WhatsApp">&#128241;</a>
+<div class="toast" id="toast"></div>
+
+<script src="js/products.js"></script>
+<script src="js/main.js"></script>
+<script>
+  function getParams() {
+    return new URLSearchParams(window.location.search);
+  }
+
+  function cardHTML(p) {
+    return `
+      <div class="product-card">
+        <a href="product.html?id=${p.id}">
+          <div class="product-media" data-tag="${p.tag}">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+          </div>
+        </a>
+        <button class="wishlist-btn ${Store.getWishlist().includes(p.id) ? 'active' : ''}" onclick="toggleWishlist('${p.id}', this)">&#9825;</button>
+        <div class="quick-view"><a href="product.html?id=${p.id}">Quick View</a></div>
+        <div class="product-info">
+          <div class="product-cat">${p.category}</div>
+          <a href="product.html?id=${p.id}"><h3 class="product-name">${p.name}</h3></a>
+          <div class="product-price">
+            <span class="price-now">₹${p.price}</span>
+            <span class="price-mrp">₹${p.mrp}</span>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">Add to Cart</button>
+            <a href="${whatsappLink(p)}" target="_blank" class="btn btn-whatsapp btn-sm">WhatsApp</a>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function applyFilters() {
+    const cats = [...document.querySelectorAll(".f-category:checked")].map(c => c.value);
+    const fabrics = [...document.querySelectorAll(".f-fabric:checked")].map(c => c.value);
+    const occasions = [...document.querySelectorAll(".f-occasion:checked")].map(c => c.value);
+    const maxPrice = parseInt(document.getElementById("priceRange").value);
+    const sort = document.getElementById("sortSelect").value;
+    const search = (getParams().get("search") || "").toLowerCase();
+
+    let result = PRODUCTS.filter(p => {
+      if (cats.length && !cats.includes(p.category)) return false;
+      if (fabrics.length && !fabrics.includes(p.fabric)) return false;
+      if (occasions.length && !occasions.includes(p.occasion)) return false;
+      if (p.price > maxPrice) return false;
+      if (search && !p.name.toLowerCase().includes(search) && !p.category.toLowerCase().includes(search)) return false;
+      return true;
+    });
+
+    if (sort === "low") result.sort((a, b) => a.price - b.price);
+    else if (sort === "high") result.sort((a, b) => b.price - a.price);
+    else if (sort === "popular") result.sort((a, b) => b.reviews - a.reviews);
+    else if (sort === "new") result.reverse();
+
+    document.getElementById("shopGrid").innerHTML = result.map(cardHTML).join("") || `<p style="grid-column:1/-1;text-align:center;color:var(--black-soft);padding:40px;">No dupattas match these filters. Try clearing some.</p>`;
+    document.getElementById("resultCount").textContent = `Showing ${result.length} product${result.length !== 1 ? 's' : ''}`;
+  }
+
+  function clearFilters() {
+    document.querySelectorAll(".filters input[type=checkbox]").forEach(c => c.checked = false);
+    document.getElementById("priceRange").value = 6500;
+    document.getElementById("priceVal").textContent = "6500";
+    document.getElementById("sortSelect").value = "default";
+    history.replaceState(null, "", "shop.html");
+    applyFilters();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = getParams();
+    const cat = params.get("cat");
+    const sortParam = params.get("sort");
+    if (cat) {
+      const box = document.querySelector(`.f-category[value="${cat}"]`);
+      if (box) box.checked = true;
+    }
+    if (sortParam) document.getElementById("sortSelect").value = sortParam;
+    if (params.get("search")) document.getElementById("navSearch").value = params.get("search");
+
+    document.querySelectorAll(".filters input").forEach(el => el.addEventListener("change", applyFilters));
+    document.getElementById("priceRange").addEventListener("input", (e) => {
+      document.getElementById("priceVal").textContent = e.target.value;
+      applyFilters();
+    });
+    document.getElementById("sortSelect").addEventListener("change", applyFilters);
+
+    applyFilters();
+  });
+</script>
+</body>
+</html>
