@@ -152,7 +152,7 @@ const PRODUCTS = [
   }
 ];
 
-const WHATSAPP_NUMBER = "917237028850";
+const WHATSAPP_NUMBER = "917309329960";
 
 function whatsappLink(product) {
   const msg = `Hi AABROOH, I'd like to order:%0A*${product.name}*%0APrice: ₹${product.price}%0AProduct ID: ${product.id}%0A%0APlease share availability and delivery details.`;
