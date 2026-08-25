@@ -58,10 +58,11 @@ function loadProductImages() {
   const exts = ["jpg", "jpeg", "png", "webp"];
   document.querySelectorAll("[data-img-id]").forEach(el => {
     const id = el.getAttribute("data-img-id");
-    tryExtensions(id, exts, 0, (url) => {
+   tryExtensions(id, exts, 0, (url) => {
       el.style.backgroundImage = `url('${url}')`;
       el.style.backgroundSize = "cover";
       el.style.backgroundPosition = "center";
+      el.classList.add("has-photo");
     });
   });
 }
