@@ -465,6 +465,8 @@ h2.section-title {
   text-align: center;
   padding: 20px;
 }
+.product-media.has-photo::after, .gallery-main.has-photo::after { display: none; }
+
 .product-badge {
   position: absolute;
   top: 14px; left: 14px;
