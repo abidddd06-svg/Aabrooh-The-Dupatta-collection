@@ -1,8 +1,3 @@
-/* ==========================================================================
-   AABROOH — Core site behaviour (cart, wishlist, nav, toasts)
-   Cart/wishlist persist in localStorage so they survive a page reload.
-   ========================================================================== */
-
 const Store = {
   getCart() { return JSON.parse(localStorage.getItem("aabrooh_cart") || "[]"); },
   setCart(cart) { localStorage.setItem("aabrooh_cart", JSON.stringify(cart)); renderCartBadge(); },
@@ -59,7 +54,26 @@ function showToast(msg) {
   window._toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
-/* ---------- Cart drawer ---------- */
+function loadProductImages() {
+  const exts = ["jpg", "jpeg", "png", "webp"];
+  document.querySelectorAll("[data-img-id]").forEach(el => {
+    const id = el.getAttribute("data-img-id");
+    tryExtensions(id, exts, 0, (url) => {
+      el.style.backgroundImage = `url('${url}')`;
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+    });
+  });
+}
+function tryExtensions(id, exts, i, onFound) {
+  if (i >= exts.length) return;
+  const url = `images/${id}.${exts[i]}`;
+  const img = new Image();
+  img.onload = () => onFound(url);
+  img.onerror = () => tryExtensions(id, exts, i + 1, onFound);
+  img.src = url;
+}
+
 function renderCartDrawer() {
   const body = document.getElementById("drawerBody");
   const footer = document.getElementById("drawerFoot");
@@ -121,12 +135,10 @@ function closeDrawer() {
   document.getElementById("overlay").classList.remove("open");
 }
 
-/* ---------- Mobile nav ---------- */
 function toggleMobileMenu() {
   document.getElementById("mobileMenu").classList.toggle("open");
 }
 
-/* ---------- Init on every page ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   renderCartBadge();
   renderWishlistBadge();
@@ -143,7 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.getElementById("navToggle");
   if (navToggle) navToggle.addEventListener("click", toggleMobileMenu);
 
-  // Newsletter form
   const newsForm = document.getElementById("newsletterForm");
   if (newsForm) {
     newsForm.addEventListener("submit", (e) => {
@@ -153,7 +164,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Contact form
   const contactForm = document.getElementById("contactForm");
   if (contactForm) {
     contactForm.addEventListener("submit", (e) => {
@@ -163,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Search
   const searchInput = document.getElementById("navSearch");
   if (searchInput) {
     searchInput.addEventListener("keydown", (e) => {
