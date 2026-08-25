@@ -230,7 +230,7 @@
     grid.innerHTML = featured.map(p => `
       <div class="product-card">
         <a href="product.html?id=${p.id}">
-          <div class="product-media" data-tag="${p.tag}">
+          <div class="product-media" data-tag="${p.tag}" data-img-id="${p.id}">
             ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
           </div>
         </a>
@@ -258,7 +258,7 @@
     const list = Store.getWishlist();
     document.querySelectorAll(".wishlist-btn").forEach((btn, i) => {
       const p = PRODUCTS[i];
-      if (p && list.includes(p.id)) btn.classList.add("active");
+      if (p && list.includes(p.id)) btn.classList.add("active");loadProductImages();
     });
   });
 </script>
