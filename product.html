@@ -86,7 +86,7 @@
 
     document.getElementById("productDetail").innerHTML = `
       <div class="gallery">
-        <div class="gallery-main" data-tag="${p.tag}"></div>
+        <div class="gallery-main" data-tag="${p.tag}" data-img-id="${p.id}"></div>
         <div class="gallery-thumbs">
           <div class="active"></div><div></div><div></div><div></div>
         </div>
@@ -147,7 +147,7 @@
     document.getElementById("relatedGrid").innerHTML = fallback.map(rp => `
       <div class="product-card">
         <a href="product.html?id=${rp.id}">
-          <div class="product-media" data-tag="${rp.tag}">${rp.badge ? `<span class="product-badge">${rp.badge}</span>` : ""}</div>
+          <div class="product-media" data-tag="${rp.tag}" data-img-id="${rp.id}">${rp.badge ? `<span class="product-badge">${rp.badge}</span>` : ""}</div>
         </a>
         <button class="wishlist-btn ${Store.getWishlist().includes(rp.id) ? 'active' : ''}" onclick="toggleWishlist('${rp.id}', this)">&#9825;</button>
         <div class="quick-view"><a href="product.html?id=${rp.id}">Quick View</a></div>
@@ -162,6 +162,7 @@
         </div>
       </div>
     `).join("");
+     loadProductImages();
   }
 
   function changeQty(delta) {
