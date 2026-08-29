@@ -8,7 +8,7 @@
 const PRODUCTS = [
   {
     id: "aabrooh-001",
-    name: "Ivory Zari Border Dupatta",
+    name: "Premium Chiffon Hijab Collection",
     category: "Everyday Collection",
     fabric: "Organza",
     color: "Ivory",
@@ -26,7 +26,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-002",
-    name: "Matte Gold Embroidered Dupatta",
+    name: "Luxury Chiffon Hijab Collection",
     category: "Premium Collection",
     fabric: "Silk",
     color: "Gold",
@@ -44,7 +44,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-003",
-    name: "Black Chiffon Sequin Dupatta",
+    name: "Premium Textured Chiffon Hijab",
     category: "Party Wear",
     fabric: "Chiffon",
     color: "Black",
@@ -62,7 +62,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-004",
-    name: "Bridal Red Banarasi Dupatta",
+    name: "Soft Chiffon Hijab Collection",
     category: "Wedding Collection",
     fabric: "Banarasi Silk",
     color: "Red",
@@ -80,7 +80,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-005",
-    name: "Beige Floral Print Dupatta",
+    name: "Classic Modal Hijab Collection",
     category: "Everyday Collection",
     fabric: "Cotton Silk",
     color: "Beige",
@@ -98,7 +98,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-006",
-    name: "Emerald Green Mirror Work Dupatta",
+    name: "Premium Modal Hijab Collection",
     category: "Festive Collection",
     fabric: "Georgette",
     color: "Green",
@@ -116,7 +116,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-007",
-    name: "Blush Pink Net Dupatta",
+    name: "Delicate Chiffon Hijab Collection",
     category: "Party Wear",
     fabric: "Net",
     color: "Pink",
@@ -134,7 +134,7 @@ const PRODUCTS = [
   },
   {
     id: "aabrooh-008",
-    name: "Charcoal Grey Minimal Dupatta",
+    name: "Elegant Chiffon Hijab Collection",
     category: "Everyday Collection",
     fabric: "Chiffon",
     color: "Grey",
