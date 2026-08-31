@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | AABROOH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .checkout-wrap { max-width: 720px; margin: 0 auto; padding: 50px 32px 100px; }
+  .checkout-summary { background: var(--white); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow-soft); margin-bottom: 30px; }
+  .checkout-summary h3 { font-size: 16px; margin-bottom: 18px; }
+  .co-item { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--black-soft); padding: 10px 0; border-bottom: 1px solid var(--gold-soft); }
+  .co-item:last-of-type { border-bottom: none; }
+  .co-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 600; padding-top: 16px; margin-top: 6px; border-top: 1px solid var(--gold-soft); }
+  .checkout-form { display: flex; flex-direction: column; gap: 16px; }
+  .checkout-form input, .checkout-form textarea {
+    padding: 15px 20px; border: 1px solid var(--gold-soft); border-radius: var(--radius-sm);
+    background: var(--white); font-size: 13.5px; outline: none; transition: border-color var(--transition);
+  }
+  .checkout-form input:focus, .checkout-form textarea:focus { border-color: var(--gold); }
+  .checkout-form textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: flex; gap: 14px; }
+  .form-row input { flex: 1; }
+  .empty-cart-msg { text-align: center; padding: 60px 20px; color: var(--black-soft); }
+  .co-success { text-align: center; padding: 70px 20px; }
+  .co-success .icon { font-size: 46px; margin-bottom: 20px; }
+  .co-success h2 { margin-bottom: 12px; }
+  .co-success p { color: var(--black-soft); font-size: 14px; max-width: 420px; margin: 0 auto 30px; }
+</style>
+</head>
+<body>
+
+<div class="announce">Pan India Shipping · Not Just a Dupatta, A Statement of Grace</div>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">AABR<span>OO</span>H</a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-icons">
+      <button class="icon-btn" title="Cart" id="cartBtn">&#128092;<span class="badge cart-count">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="breadcrumb"><a href="index.html">Home</a> / Checkout</div>
+
+<section class="page-header">
+  <span class="eyebrow">Almost There</span>
+  <h1>Checkout</h1>
+  <p>Fill in your details — we'll confirm your order by email or WhatsApp.</p>
+</section>
+
+<div class="checkout-wrap" id="checkoutWrap">
+  <!-- filled by JS -->
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-col"><h4>Contact</h4><address>Instagram: @aabrooh.official<br>Phone: +91 73093 29960</address></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 AABROOH. All rights reserved.</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="products.js"></script>
+<script src="main.js"></script>
+<script>
+  const FORM_ENDPOINT = "https://formspree.io/f/moeqjlpa";
+
+  function renderCheckout() {
+    const cart = Store.getCart();
+    const wrap = document.getElementById("checkoutWrap");
+
+    if (cart.length === 0) {
+      wrap.innerHTML = `
+        <div class="empty-cart-msg">
+          <p style="font-size:15px;margin-bottom:20px;">Your bag is empty — add a few dupattas before checking out.</p>
+          <a href="shop.html" class="btn btn-primary">Go to Shop</a>
+        </div>`;
+      return;
+    }
+
+    let total = 0;
+    let itemsHTML = "";
+    let itemsPlainText = "";
+    cart.forEach(item => {
+      const p = PRODUCTS.find(pr => pr.id === item.id);
+      if (!p) return;
+      const lineTotal = p.price * item.qty;
+      total += lineTotal;
+      itemsHTML += `<div class="co-item"><span>${p.name} × ${item.qty}</span><span>₹${lineTotal}</span></div>`;
+      itemsPlainText += `${p.name} x${item.qty} - ₹${lineTotal}\n`;
+    });
+
+    wrap.innerHTML = `
+      <div class="checkout-summary">
+        <h3>Order Summary</h3>
+        ${itemsHTML}
+        <div class="co-total"><span>Total</span><span>₹${total}</span></div>
+      </div>
+
+      <form class="checkout-form" id="checkoutForm" action="${FORM_ENDPOINT}" method="POST">
+        <input type="hidden" name="Order Details" value="${itemsPlainText.replace(/"/g, '&quot;')}">
+        <input type="hidden" name="Order Total" value="₹${total}">
+        <input type="hidden" name="_subject" value="New AABROOH Order - ₹${total}">
+
+        <div class="form-row">
+          <input type="text" name="Full Name" placeholder="Full Name" required>
+          <input type="tel" name="Phone" placeholder="Phone Number" required>
+        </div>
+        <input type="email" name="Email" placeholder="Email Address" required>
+        <textarea name="Delivery Address" placeholder="Full Delivery Address (House no, Street, City, State)" required></textarea>
+        <input type="text" name="Pincode" placeholder="Pincode" required>
+        <textarea name="Order Notes" placeholder="Any notes (optional) — preferred size, gifting, etc."></textarea>
+
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Place Order — ₹${total}</button>
+        <p style="font-size:12px;color:var(--black-soft);text-align:center;">Payment is not collected here. We'll confirm availability and share UPI/payment details after you place this order.</p>
+      </form>
+    `;
+
+    document.getElementById("checkoutForm").addEventListener("submit", handleSubmit);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.textContent = "Placing Order...";
+
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "Accept": "application/json" }
+      });
+      if (res.ok) {
+        Store.setCart([]);
+        showSuccess();
+      } else {
+        throw new Error("Submission failed");
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = "Place Order";
+      showToast("Something went wrong — please try again or order via WhatsApp");
+    }
+  }
+
+  function showSuccess() {
+    document.getElementById("checkoutWrap").innerHTML = `
+      <div class="co-success">
+        <div class="icon">&#10004;&#65039;</div>
+        <h2>Order Received</h2>
+        <p>Thank you! Your order details have been sent to us. We'll reach out on your phone/email shortly to confirm availability and share payment details.</p>
+        <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+      </div>`;
+  }
+
+  document.addEventListener("DOMContentLoaded", renderCheckout);
+</script>
+</body>
+</html>
