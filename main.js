@@ -94,7 +94,7 @@ function renderCartDrawer() {
     total += p.price * item.qty;
     return `
       <div class="cart-item">
-        <div class="cart-item-img"></div>
+        <div class="cart-item-img" data-img-id="${p.id}"></div>
         <div class="cart-item-info">
           <div class="name">${p.name}</div>
           <div class="meta">Qty: ${item.qty} · ₹${p.price}</div>
@@ -106,11 +106,12 @@ function renderCartDrawer() {
       </div>`;
   }).join("");
 
-   footer.innerHTML = `
+  footer.innerHTML = `
     <div class="row"><span>Subtotal</span><span style="font-weight:600;">₹${total}</span></div>
     <a href="checkout.html" class="btn btn-primary btn-block" style="margin-bottom:10px;">Checkout (Order Form)</a>
     <a href="${cartWhatsappLink(cart)}" target="_blank" class="btn btn-whatsapp btn-block">Or Order via WhatsApp</a>
   `;
+  loadProductImages();
 }
 
 function cartWhatsappLink(cart) {
