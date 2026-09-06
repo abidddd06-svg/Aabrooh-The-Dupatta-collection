@@ -13,7 +13,7 @@ const PRODUCTS = [
     fabric: "Organza",
     color: "Ivory",
     occasion: "Everyday",
-    price: 249,
+    price: 11,
     mrp: 499,
     rating: 4.8,
     reviews: 32,
