@@ -115,7 +115,7 @@
 
         <div class="pd-actions">
           <button class="btn btn-primary" onclick="addToCart('${p.id}', currentQty)">Add to Cart</button>
-          <a href="${whatsappLink(p)}" target="_blank" class="btn btn-whatsapp">Buy on WhatsApp</a>
+          <button class="btn btn-whatsapp" onclick="buyNow('${p.id}', currentQty)">Buy Now</button>
           <button class="btn btn-outline" onclick="toggleWishlist('${p.id}', this); this.classList.toggle('active-wish')" style="flex:0 0 52px;">&#9825;</button>
         </div>
 
