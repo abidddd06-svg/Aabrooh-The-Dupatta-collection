@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   .checkout-wrap { max-width: 720px; margin: 0 auto; padding: 50px 32px 100px; }
   .checkout-summary { background: var(--white); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow-soft); margin-bottom: 30px; }
@@ -28,6 +29,7 @@
   .co-success .icon { font-size: 46px; margin-bottom: 20px; }
   .co-success h2 { margin-bottom: 12px; }
   .co-success p { color: var(--black-soft); font-size: 14px; max-width: 420px; margin: 0 auto 30px; }
+  .secure-note { font-size: 12px; color: var(--black-soft); text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -54,11 +56,10 @@
 <section class="page-header">
   <span class="eyebrow">Almost There</span>
   <h1>Checkout</h1>
-  <p>Fill in your details — we'll confirm your order by email or WhatsApp.</p>
+  <p>Enter your details and complete payment securely.</p>
 </section>
 
 <div class="checkout-wrap" id="checkoutWrap">
-  <!-- filled by JS -->
 </div>
 
 <footer class="footer">
@@ -74,6 +75,11 @@
 <script src="main.js"></script>
 <script>
   const FORM_ENDPOINT = "https://formspree.io/f/moeqjlpa";
+  const PAYMENT_WORKER_URL = "https://aabroohpayment.abidddd06.workers.dev/";
+  const RAZORPAY_KEY_ID = "rzp_test_TYi2qrZN3cl7Ld";
+
+  let cartTotal = 0;
+  let cartItemsText = "";
 
   function renderCheckout() {
     const cart = Store.getCart();
@@ -100,6 +106,9 @@
       itemsPlainText += `${p.name} x${item.qty} - ₹${lineTotal}\n`;
     });
 
+    cartTotal = total;
+    cartItemsText = itemsPlainText;
+
     wrap.innerHTML = `
       <div class="checkout-summary">
         <h3>Order Summary</h3>
@@ -107,51 +116,88 @@
         <div class="co-total"><span>Total</span><span>₹${total}</span></div>
       </div>
 
-      <form class="checkout-form" id="checkoutForm" action="${FORM_ENDPOINT}" method="POST">
-        <input type="hidden" name="Order Details" value="${itemsPlainText.replace(/"/g, '&quot;')}">
-        <input type="hidden" name="Order Total" value="₹${total}">
-        <input type="hidden" name="_subject" value="New AABROOH Order - ₹${total}">
-
+      <form class="checkout-form" id="checkoutForm">
         <div class="form-row">
-          <input type="text" name="Full Name" placeholder="Full Name" required>
-          <input type="tel" name="Phone" placeholder="Phone Number" required>
+          <input type="text" id="custName" placeholder="Full Name" required>
+          <input type="tel" id="custPhone" placeholder="Phone Number" required>
         </div>
-        <input type="email" name="Email" placeholder="Email Address" required>
-        <textarea name="Delivery Address" placeholder="Full Delivery Address (House no, Street, City, State)" required></textarea>
-        <input type="text" name="Pincode" placeholder="Pincode" required>
-        <textarea name="Order Notes" placeholder="Any notes (optional) — preferred size, gifting, etc."></textarea>
+        <input type="email" id="custEmail" placeholder="Email Address" required>
+        <textarea id="custAddress" placeholder="Full Delivery Address (House no, Street, City, State)" required></textarea>
+        <input type="text" id="custPincode" placeholder="Pincode" required>
+        <textarea id="custNotes" placeholder="Any notes (optional)"></textarea>
 
-        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Place Order — ₹${total}</button>
-        <p style="font-size:12px;color:var(--black-soft);text-align:center;">Payment is not collected here. We'll confirm availability and share UPI/payment details after you place this order.</p>
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Pay ₹${total} & Place Order</button>
+        <p class="secure-note">&#128274; Secured by Razorpay</p>
       </form>
     `;
 
-    document.getElementById("checkoutForm").addEventListener("submit", handleSubmit);
+    document.getElementById("checkoutForm").addEventListener("submit", handlePayment);
   }
 
-  async function handleSubmit(e) {
+  async function handlePayment(e) {
     e.preventDefault();
-    const form = e.target;
     const btn = document.getElementById("submitBtn");
+    const originalText = btn.textContent;
     btn.disabled = true;
-    btn.textContent = "Placing Order...";
+    btn.textContent = "Processing...";
+
+    const name = document.getElementById("custName").value;
+    const phone = document.getElementById("custPhone").value;
+    const email = document.getElementById("custEmail").value;
+    const address = document.getElementById("custAddress").value;
+    const pincode = document.getElementById("custPincode").value;
+    const notes = document.getElementById("custNotes").value;
 
     try {
-      const res = await fetch(form.action, {
+      const orderRes = await fetch(PAYMENT_WORKER_URL, {
         method: "POST",
-        body: new FormData(form),
-        headers: { "Accept": "application/json" }
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: cartTotal })
       });
-      if (res.ok) {
-        Store.setCart([]);
-        showSuccess();
-      } else {
-        throw new Error("Submission failed");
-      }
+      const orderData = await orderRes.json();
+
+      if (!orderData.order_id) throw new Error("Could not start payment");
+
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: "INR",
+        name: "AABROOH",
+        description: "Order Payment",
+        order_id: orderData.order_id,
+        prefill: { name: name, email: email, contact: phone },
+        theme: { color: "#1A1A1A" },
+        handler: function (response) {
+          const fd = new FormData();
+          fd.append("Full Name", name);
+          fd.append("Phone", phone);
+          fd.append("Email", email);
+          fd.append("Delivery Address", address);
+          fd.append("Pincode", pincode);
+          fd.append("Order Notes", notes);
+          fd.append("Order Details", cartItemsText);
+          fd.append("Order Total", `₹${cartTotal}`);
+          fd.append("Payment ID", response.razorpay_payment_id);
+          fd.append("_subject", `PAID Order - ₹${cartTotal} - ${name}`);
+          fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
+
+          Store.setCart([]);
+          showSuccess();
+        },
+        modal: {
+          ondismiss: function () {
+            btn.disabled = false;
+            btn.textContent = originalText;
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
     } catch (err) {
       btn.disabled = false;
-      btn.textContent = "Place Order";
-      showToast("Something went wrong — please try again or order via WhatsApp");
+      btn.textContent = originalText;
+      showToast("Something went wrong. Please try again.");
     }
   }
 
@@ -159,8 +205,8 @@
     document.getElementById("checkoutWrap").innerHTML = `
       <div class="co-success">
         <div class="icon">&#10004;&#65039;</div>
-        <h2>Order Received</h2>
-        <p>Thank you! Your order details have been sent to us. We'll reach out on your phone/email shortly to confirm availability and share payment details.</p>
+        <h2>Order Confirmed</h2>
+        <p>Thank you for your payment! Your order has been placed successfully. We'll ship it soon and keep you updated.</p>
         <a href="index.html" class="btn btn-primary">Continue Shopping</a>
       </div>`;
   }
