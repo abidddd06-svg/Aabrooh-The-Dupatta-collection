@@ -108,7 +108,7 @@ function renderCartDrawer() {
 
   footer.innerHTML = `
     <div class="row"><span>Subtotal</span><span style="font-weight:600;">₹${total}</span></div>
-    <a href="checkout.html" class="btn btn-primary btn-block" style="margin-bottom:10px;">Checkout (Order Form)</a>
+    <a href="checkout.html" class="btn btn-primary btn-block" style="margin-bottom:10px;">Checkout via Razorpay</a>
     <a href="${cartWhatsappLink(cart)}" target="_blank" class="btn btn-whatsapp btn-block">Or Order via WhatsApp</a>
   `;
   loadProductImages();
@@ -140,6 +140,11 @@ function closeDrawer() {
 
 function toggleMobileMenu() {
   document.getElementById("mobileMenu").classList.toggle("open");
+}
+
+function buyNow(productId, qty = 1) {
+  Store.setCart([{ id: productId, qty: qty }]);
+  window.location.href = "checkout.html";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
