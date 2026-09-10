@@ -13,6 +13,7 @@
   .checkout-summary { background: var(--white); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow-soft); margin-bottom: 30px; }
   .checkout-summary h3 { font-size: 16px; margin-bottom: 18px; }
   .co-item { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--black-soft); padding: 10px 0; border-bottom: 1px solid var(--gold-soft); }
+  .co-item .sku { font-size: 11px; color: #A39E93; display: block; margin-top: 2px; }
   .co-item:last-of-type { border-bottom: none; }
   .co-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 600; padding-top: 16px; margin-top: 6px; border-top: 1px solid var(--gold-soft); }
   .checkout-form { display: flex; flex-direction: column; gap: 16px; }
@@ -28,7 +29,10 @@
   .co-success { text-align: center; padding: 70px 20px; }
   .co-success .icon { font-size: 46px; margin-bottom: 20px; }
   .co-success h2 { margin-bottom: 12px; }
-  .co-success p { color: var(--black-soft); font-size: 14px; max-width: 420px; margin: 0 auto 30px; }
+  .co-success p { color: var(--black-soft); font-size: 14px; max-width: 420px; margin: 0 auto 16px; }
+  .order-id-box { background: var(--ivory); border: 1px solid var(--gold-soft); border-radius: var(--radius-sm); padding: 16px 24px; display: inline-block; margin-bottom: 24px; }
+  .order-id-box .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); display: block; margin-bottom: 4px; }
+  .order-id-box .value { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
   .secure-note { font-size: 12px; color: var(--black-soft); text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
 </style>
 </head>
@@ -80,6 +84,14 @@
 
   let cartTotal = 0;
   let cartItemsText = "";
+  let cartItemsHTML = "";
+  let currentOrderId = "";
+
+  function generateOrderId() {
+    const ts = Date.now().toString(36).toUpperCase();
+    const rand = Math.random().toString(36).substring(2, 5).toUpperCase();
+    return `AAB-${ts}-${rand}`;
+  }
 
   function renderCheckout() {
     const cart = Store.getCart();
@@ -102,12 +114,13 @@
       if (!p) return;
       const lineTotal = p.price * item.qty;
       total += lineTotal;
-      itemsHTML += `<div class="co-item"><span>${p.name} × ${item.qty}</span><span>₹${lineTotal}</span></div>`;
-      itemsPlainText += `${p.name} x${item.qty} - ₹${lineTotal}\n`;
+      itemsHTML += `<div class="co-item"><span>${p.name} × ${item.qty}<span class="sku">SKU: ${p.id}</span></span><span>₹${lineTotal}</span></div>`;
+      itemsPlainText += `${p.name} (SKU: ${p.id}) x${item.qty} - ₹${lineTotal}\n`;
     });
 
     cartTotal = total;
     cartItemsText = itemsPlainText;
+    cartItemsHTML = itemsHTML;
 
     wrap.innerHTML = `
       <div class="checkout-summary">
@@ -148,11 +161,13 @@
     const pincode = document.getElementById("custPincode").value;
     const notes = document.getElementById("custNotes").value;
 
+    currentOrderId = generateOrderId();
+
     try {
       const orderRes = await fetch(PAYMENT_WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: cartTotal })
+        body: JSON.stringify({ amount: cartTotal, receipt: currentOrderId })
       });
       const orderData = await orderRes.json();
 
@@ -163,26 +178,28 @@
         amount: orderData.amount,
         currency: "INR",
         name: "AABROOH",
-        description: "Order Payment",
+        description: `Order ${currentOrderId}`,
         order_id: orderData.order_id,
         prefill: { name: name, email: email, contact: phone },
         theme: { color: "#1A1A1A" },
         handler: function (response) {
           const fd = new FormData();
+          fd.append("Order ID", currentOrderId);
           fd.append("Full Name", name);
           fd.append("Phone", phone);
           fd.append("Email", email);
           fd.append("Delivery Address", address);
           fd.append("Pincode", pincode);
           fd.append("Order Notes", notes);
-          fd.append("Order Details", cartItemsText);
+          fd.append("Order Items (with SKU)", cartItemsText);
           fd.append("Order Total", `₹${cartTotal}`);
-          fd.append("Payment ID", response.razorpay_payment_id);
-          fd.append("_subject", `PAID Order - ₹${cartTotal} - ${name}`);
+          fd.append("Razorpay Payment ID", response.razorpay_payment_id);
+          fd.append("Razorpay Order ID", orderData.order_id);
+          fd.append("_subject", `New Order ${currentOrderId} - ₹${cartTotal} - ${name}`);
           fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
 
           Store.setCart([]);
-          showSuccess();
+          showSuccess(currentOrderId);
         },
         modal: {
           ondismiss: function () {
@@ -194,19 +211,23 @@
 
       const rzp = new Razorpay(options);
       rzp.open();
-      } catch (err) {
+    } catch (err) {
       btn.disabled = false;
       btn.textContent = originalText;
       showToast("Error: " + err.message);
     }
   }
 
-  function showSuccess() {
+  function showSuccess(orderId) {
     document.getElementById("checkoutWrap").innerHTML = `
       <div class="co-success">
         <div class="icon">&#10004;&#65039;</div>
         <h2>Order Confirmed</h2>
-        <p>Thank you for your payment! Your order has been placed successfully. We'll ship it soon and keep you updated.</p>
+        <div class="order-id-box">
+          <span class="label">Your Order ID</span>
+          <span class="value">${orderId}</span>
+        </div>
+        <p>Thank you for your payment! Please save this Order ID for any future queries. We'll ship your order soon and keep you updated.</p>
         <a href="index.html" class="btn btn-primary">Continue Shopping</a>
       </div>`;
   }
