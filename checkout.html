@@ -81,14 +81,12 @@
 <script src="products.js"></script>
 <script src="main.js"></script>
 <script>
-  const FORM_ENDPOINT = "https://formspree.io/f/moeqjlpa";
   const PAYMENT_WORKER_URL = "https://aabroohpayment.abidddd06.workers.dev/";
   const RAZORPAY_KEY_ID = "rzp_live_TYq9CGLOTz1Bqv";
 
   let cartTotal = 0;
   let cartItemsText = "";
   let cartItemsHTML = "";
-  let currentOrderId = "";
 
   function generateOrderId() {
     const ts = Date.now().toString(36).toUpperCase();
@@ -162,12 +160,11 @@
     const email = document.getElementById("custEmail").value;
     const address = document.getElementById("custAddress").value;
     const pincode = document.getElementById("custPincode").value;
-    const notes = document.getElementById("custNotes").value;
 
-    currentOrderId = generateOrderId();
+    const currentOrderId = generateOrderId();
 
     try {
-      const orderRes = await fetch(PAYMENT_WORKER_URL, {
+      const orderRes = await fetch(PAYMENT_WORKER_URL + "create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: cartTotal, receipt: currentOrderId })
@@ -186,20 +183,22 @@
         prefill: { name: name, email: email, contact: phone },
         theme: { color: "#1A1A1A" },
         handler: function (response) {
-          const fd = new FormData();
-          fd.append("Order ID", currentOrderId);
-          fd.append("Full Name", name);
-          fd.append("Phone", phone);
-          fd.append("Email", email);
-          fd.append("Delivery Address", address);
-          fd.append("Pincode", pincode);
-          fd.append("Order Notes", notes);
-          fd.append("Order Items (with SKU)", cartItemsText);
-          fd.append("Order Total", `₹${cartTotal}`);
-          fd.append("Razorpay Payment ID", response.razorpay_payment_id);
-          fd.append("Razorpay Order ID", orderData.order_id);
-          fd.append("_subject", `New Order ${currentOrderId} - ₹${cartTotal} - ${name}`);
-          fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
+          fetch(PAYMENT_WORKER_URL + "send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: currentOrderId,
+              customerName: name,
+              customerEmail: email,
+              customerPhone: phone,
+              address: address,
+              pincode: pincode,
+              itemsHtml: cartItemsHTML,
+              itemsText: cartItemsText,
+              total: cartTotal,
+              paymentId: response.razorpay_payment_id
+            })
+          });
 
           Store.setCart([]);
           showSuccess(currentOrderId);
@@ -230,7 +229,7 @@
           <span class="label">Your Order ID</span>
           <span class="value">${orderId}</span>
         </div>
-        <p>Thank you for your payment! Please save this Order ID for any future queries. We'll ship your order soon and keep you updated.</p>
+        <p>Thank you for your payment! A confirmation email has been sent to you. Please save this Order ID for any future queries.</p>
         <a href="index.html" class="btn btn-primary">Continue Shopping</a>
       </div>`;
   }
