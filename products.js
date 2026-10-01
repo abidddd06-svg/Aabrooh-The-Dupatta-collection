@@ -23,6 +23,29 @@ const PRODUCTS = [
     care: "Dry clean only. Store folded in muslin cloth. Keep away from direct sunlight and perfume contact.",
     shipping: "Ships within 2-3 business days. Pan India delivery in 4-7 business days.",
     returns: "7-day easy returns on unused pieces with original tags."
+    colors: [
+      { name: "Pale Mauve", available: true },
+      { name: "Sea Blue", available: true },
+      { name: "Forest", available: true },
+      { name: "Beige", available: true },
+      { name: "Pearl", available: true },
+      { name: "Vintage Blush", available: true },
+      { name: "Soft Peach", available: true },
+      { name: "Pista", available: true },
+      { name: "Soft Lilac", available: true },
+      { name: "Dusty Tan", available: true },
+      { name: "Pale Rose", available: true },
+      { name: "Deep Blue", available: false },
+      { name: "Taupe Beige", available: true },
+      { name: "Cream", available: true },
+      { name: "Lilac", available: true },
+      { name: "Maroon", available: false },
+      { name: "Powder Blue", available: true },
+      { name: "White", available: true },
+      { name: "Pale Cream", available: true },
+      { name: "Ash Brown", available: false },
+      { name: "Soft Pink", available: true }
+    ]
   },
   {
     id: "aabrooh-002",
