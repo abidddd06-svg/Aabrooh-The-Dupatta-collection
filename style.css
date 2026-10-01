@@ -914,6 +914,23 @@ h2.section-title {
 }
 .value-card h3 { font-size: 16px; margin-bottom: 10px; }
 .value-card p { font-size: 13px; color: var(--black-soft); }
+/* ---------- Color variant pills ---------- */
+.color-label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; display: block; }
+.color-options { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+.color-pill {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold-soft);
+  background: var(--white);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--black);
+  font-family: inherit;
+}
+.color-pill:hover { border-color: var(--gold); }
+.color-pill.selected { background: var(--gold); border-color: var(--gold); color: var(--white); font-weight: 600; }
+.color-pill.unavailable { color: #C9C4BA; border-color: #ECE6DA; text-decoration: line-through; cursor: not-allowed; background: #FAFAF8; }
 
 /* ---------- Toast ---------- */
 .toast {
