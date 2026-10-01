@@ -5,11 +5,11 @@ const Store = {
   setWishlist(list) { localStorage.setItem("aabrooh_wishlist", JSON.stringify(list)); renderWishlistBadge(); }
 };
 
-function addToCart(productId, qty = 1) {
+function addToCart(productId, qty = 1, color = null) {
   const cart = Store.getCart();
-  const existing = cart.find(i => i.id === productId);
+  const existing = cart.find(i => i.id === productId && i.color === color);
   if (existing) existing.qty += qty;
-  else cart.push({ id: productId, qty });
+  else cart.push({ id: productId, qty, color });
   Store.setCart(cart);
   showToast("Added to cart");
   renderCartDrawer();
@@ -93,10 +93,10 @@ function renderCartDrawer() {
     if (!p) return "";
     total += p.price * item.qty;
     return `
-      <div class="cart-item">
+           <div class="cart-item">
         <div class="cart-item-img" data-img-id="${p.id}"></div>
         <div class="cart-item-info">
-          <div class="name">${p.name}</div>
+          <div class="name">${p.name}${item.color ? ` <span style="color:#A9824C;font-size:11px;">(${item.color})</span>` : ""}</div>
           <div class="meta">Qty: ${item.qty} · ₹${p.price}</div>
           <div class="row">
             <span style="font-weight:600;">₹${p.price * item.qty}</span>
@@ -142,8 +142,8 @@ function toggleMobileMenu() {
   document.getElementById("mobileMenu").classList.toggle("open");
 }
 
-function buyNow(productId, qty = 1) {
-  Store.setCart([{ id: productId, qty: qty }]);
+function buyNow(productId, qty = 1, color = null) {
+  Store.setCart([{ id: productId, qty: qty, color: color }]);
   window.location.href = "checkout.html";
 }
 
