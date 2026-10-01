@@ -22,7 +22,7 @@ const PRODUCTS = [
     description: "A whisper-light organza dupatta finished with a hand-worked gold zari border. Designed for everyday elegance — soft against the skin, structured enough to hold a graceful drape from morning through evening.",
     care: "Dry clean only. Store folded in muslin cloth. Keep away from direct sunlight and perfume contact.",
     shipping: "Ships within 2-3 business days. Pan India delivery in 4-7 business days.",
-    returns: "7-day easy returns on unused pieces with original tags."
+    returns: "7-day easy returns on unused pieces with original tags.",
     colors: [
       { name: "Pale Mauve", available: true },
       { name: "Sea Blue", available: true },
