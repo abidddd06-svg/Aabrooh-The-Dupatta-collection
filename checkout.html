@@ -115,8 +115,9 @@
       if (!p) return;
       const lineTotal = p.price * item.qty;
       total += lineTotal;
-      itemsHTML += `<div class="co-item"><span>${p.name} × ${item.qty}<span class="sku">SKU: ${p.id}</span></span><span>₹${lineTotal}</span></div>`;
-      itemsPlainText += `${p.name} (SKU: ${p.id}) x${item.qty} - ₹${lineTotal}\n`;
+     const colorText = item.color ? ` — Color: ${item.color}` : "";
+      itemsHTML += `<div class="co-item"><span>${p.name}${colorText} × ${item.qty}<span class="sku">SKU: ${p.id}</span></span><span>₹${lineTotal}</span></div>`;
+      itemsPlainText += `${p.name}${colorText} (SKU: ${p.id}) x${item.qty} - ₹${lineTotal}\n`;
     });
 
     cartTotal = total;
